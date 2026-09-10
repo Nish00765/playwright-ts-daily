@@ -2,8 +2,6 @@ pipeline {
   agent any
 
   tools {
-    // Must match the name of a NodeJS installation configured in Jenkins
-    // (Manage Jenkins → Tools → NodeJS → e.g. "node-20").
     nodejs 'node-20'
   }
 
@@ -41,15 +39,6 @@ pipeline {
     stage('Test') {
       steps { sh 'npm test' }
     }
-
-    stage('Deploy to Render') {
-      when { branch 'main' }
-      steps {
-        withCredentials([string(credentialsId: 'render-deploy-hook-url', variable: 'HOOK')]) {
-          sh 'curl -fsS -X POST "$HOOK"'
-        }
-      }
-    }
   }
 
   post {
@@ -69,6 +58,20 @@ pipeline {
         reportName: 'Playwright HTML Report'
       ])
     }
+
+    success {
+      script {
+        if (env.BRANCH_NAME == 'main') {
+          echo 'All tests passed on main — triggering Render deploy.'
+          withCredentials([string(credentialsId: 'render-deploy-hook-url', variable: 'HOOK')]) {
+            sh 'curl -fsS -X POST "$HOOK"'
+          }
+        } else {
+          echo "Skipping Render deploy — branch is ${env.BRANCH_NAME}, not main."
+        }
+      }
+    }
+
     failure {
       echo 'Pipeline failed — inspect the Playwright HTML report above.'
     }
