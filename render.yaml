@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: playwright-ts-daily-dashboard
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./public
+    branch: main
+    autoDeploy: false   # Jenkins triggers deploys via hook
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache

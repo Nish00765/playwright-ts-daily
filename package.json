@@ -1,0 +1,23 @@
+{
+  "name": "playwright-ts-daily",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Daily TypeScript + Playwright practice with CI/CD (Jenkins) and Render deployment.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report",
+    "track": "node scripts/update-tracker.js",
+    "build": "npm run typecheck && npm run track"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.7.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0"
+  }
+}
