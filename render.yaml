@@ -5,7 +5,7 @@ services:
     buildCommand: npm ci && npm run build
     staticPublishPath: ./public
     branch: main
-    autoDeploy: false   # Jenkins triggers deploys via hook
+    autoDeploy: true   # Jenkins triggers deploys via hook
     pullRequestPreviewsEnabled: false
     headers:
       - path: /*
